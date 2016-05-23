@@ -1,0 +1,9 @@
+.range_search{
+    float:right;
+}
+div.dt-buttons{
+    float: none;
+    position:relative;
+    width: 25%;
+    margin: 0 auto; 
+}
