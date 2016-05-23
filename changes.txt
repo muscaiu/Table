@@ -1,0 +1,9 @@
+Changes (23.05.2016)
+- added Footer total time for filtered page
+- added Footer total time for all pages
+- added Footer quantita for filtered page
+- added Footer total quantita 
+- removed Data from Search filter
+
+To Do:
+- fix export format from String to DateTime 
