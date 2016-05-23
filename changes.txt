@@ -5,5 +5,11 @@ Changes (23.05.2016)
 - added Footer total quantita 
 - removed Data from Search filter
 
+File Changes (23.05.2016)
+- added moment-duration-format.min.js
+- added moment.js
+- added references in Index.html
+- changed data_table_initializer.js (many times)
+
 To Do:
 - fix export format from String to DateTime 
