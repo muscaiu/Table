@@ -32,18 +32,16 @@ $(document).ready(function () {
             var intVal = function (i) {
                 return typeof i === 'string' ? i.replace(/[\$,]/g, '') * 1 :
                     typeof i === 'number' ? i : 0;
-            };                                                             
-
-/****************** FOOTER TOTAL quantita ****************/
+            };                                                         
+       /*********** sum Quantita **********/
             var quantita = this.api(), data;
-            //Total 
             total_quantita = quantita
                 .column(5)
                 .data()
                 .reduce(function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0);
-                
+
             pageTotal_quantita = quantita
                 .column(5, { page: 'current' })
                 .data()
@@ -55,39 +53,49 @@ $(document).ready(function () {
                 .footer())
                 .html(pageTotal_quantita + ' (' + total_quantita + ' total)');
 
-/****************** FOOTER TOTAL tempo ****************/
-            var tempo = this.api(), data;
-            // Total tempo over all pages
-            total_Duration = tempo.column(3)
+       /*********** sum Tempo **********/
+            var tempo = this.api();
+            //total for all pages
+            var tempoTotal = tempo.column(3)
+                    .data()
+                    .sum();            
+            tempoTotal = tempoTotal.toString();        
+            tempoTotal = tempoTotal.replace(/^(\d+)(\d{2})(\d{2})$/, function(m, m1, m2, m3) {
+                m1 = Number(m1); // convert captured group value to number
+                m2 = Number(m2);
+                m2 += parseInt(m3 / 60, 10); // get minutes from second and add it to minute
+                m3 = m3 % 60; // get soconds
+                m1 += parseInt(m2 / 60, 10); // get minutes from minute and add it to hour
+                m2 = m2 % 60; // get minutes
+                // add 0 to minute and second if single digit , slice(-2) will select last 2 digit
+                return m1 + ':' + ('0' + m2).slice(-2) + ':' + ('0' + m3).slice(-2); // return updated string
+            })
+            //total for current page
+            var tempoPage = tempo.column(3, { page: 'current' })
                 .data()
-                .reduce( function (a, b) {
-                    return moment.duration(a).asMilliseconds() + moment.duration(b).asMilliseconds();
-                }, 0 );
-            // Total tempo over this page
-            pageTotal_Duration = tempo.column(3, { page: 'current'} )
-                .data()
-                .reduce( function (a, b) {
-                    return moment.duration(a).asMilliseconds() + moment.duration(b).asMilliseconds();
-                }, 0 );
-            //Write Tempo in footer
-            $( tempo.column(3).footer()).html(
-                moment.utc(pageTotal_Duration).format("HH:mm:ss") + ' ('+ moment.utc(total_Duration).format("HH:mm:ss") + ' total)'
-            );
+                .sum();  
+            tempoPage = tempoPage.toString();        
+            tempoPage = tempoPage.replace(/^(\d+)(\d{2})(\d{2})$/, function(m, m1, m2, m3) {
+                    m1 = Number(m1); // convert captured group value to number
+                    m2 = Number(m2);
+                    m2 += parseInt(m3 / 60, 10); // get minutes from second and add it to minute
+                    m3 = m3 % 60; // get soconds
+                    m1 += parseInt(m2 / 60, 10); // get minutes from minute and add it to hour
+                    m2 = m2 % 60; // get minutes
+                    // add 0 to minute and second if single digit , slice(-2) will select last 2 digit
+                    return m1 + ':' + ('0' + m2).slice(-2) + ':' + ('0' + m3).slice(-2); // return updated string
+            })
+                            
+            //write in footer
+            $(tempo.column(3)
+                .footer())
+                .html(
+                tempoPage + ' (' + tempoTotal + ' total)');
         }
     });    
+
     
-    //Footer SUM teompo_new
-    // var columnData = table.columns().data();
-    // console.log(columnData[3]);
-    
-    // var sumTime = columnData[3]
-    //     .map (t=> moment.duration(t))
-    //     .reduce((sumTime, current) => sumTime.add(current), moment.duration());
-        
-    // totalSumTime = sumTime.format("hh:mm:ss");
-    // console.log("total: " + totalSumTime);
-    
-/****************** <END> Footer SUM ****************/
+/************ <END> Footer SUM ****************/
     
     // Add event listeners to the two range filtering inputs
     $('#from').change(function () {
@@ -123,7 +131,7 @@ $(document).ready(function () {
 $(function () {
     $("#from").datepicker({
         dateFormat: 'yy-mm-dd',
-        defaultDate: "+1w",
+        //defaultDate: "+1w",
         changeMonth: true,
         changeYear: true,
         numberOfMonths: 1,
@@ -133,7 +141,7 @@ $(function () {
     });
     $("#to").datepicker({
         dateFormat: 'yy-mm-dd',
-        defaultDate: "+1w",
+        //defaultDate: "+1w",
         changeMonth: true,
         changeYear: true,
         numberOfMonths: 1,
@@ -175,34 +183,15 @@ $.fn.dataTableExt.afnFiltering.push(
 
 
 /********************** SUM PLUGIN ***********************/
-// jQuery.fn.dataTable.Api.register('sum()', function () {
-//     return this.flatten().reduce(function (a, b) {
-//         if (typeof a === 'string') {
-//             a = a.replace(/[^\d.-]/g, '') * 1;
-//         }
+jQuery.fn.dataTable.Api.register('sum()', function () {
+    return this.flatten().reduce(function (a, b) {
+        if (typeof a === 'string') {
+            a = a.replace(/[^\d.-]/g, '') * 1;
+        }
         
-//         if (typeof b === 'string') {
-//             b = b.replace(/[^\d.-]/g, '') * 1;
-//         }
-//         return a + b;
-//     }, 0);
-// });
-/********************** Split Value ***********************/
-// function splitValue(value, index) {
-//         return value.substring(0, index) + ":" + value.substring(index);
-//     }
-    
-//     var x = '116265';
-//     x.replace(/^(\d+)(\d{2})(\d{2})$/, function(m, m1, m2, m3) {
-//             m1 = Number(m1);
-//             m2 = Number(m2);
-//             m2 = Number(m2);
-//             m2 += parseInt(m3 / 60, 10);
-//             m3 = m3 % 60;
-//             m1 += parseInt(m2 / 60, 10);
-//             m2 = m2 % 60;
-//             return m1 + ':' + ('0' + m2).slice(-2) + ':' + ('0' + m3).slice(-2);
-//   })
-
-// str = "Visit Microsoft!";
-// res = str.replace("Microsoft", "W3Schools"); 
+        if (typeof b === 'string') {
+            b = b.replace(/[^\d.-]/g, '') * 1;
+        }
+        return a + b;
+    }, 0);
+});
