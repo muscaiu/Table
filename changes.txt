@@ -11,5 +11,15 @@ File Changes (23.05.2016)
 - added references in Index.html
 - changed data_table_initializer.js (many times)
 
+File Changes (24.05.2016)
+- sent updates to Antonio
+
+File Changes (25.05.2016)
+- fixed footer sum of tempo_new to add hh:mm:ss
+
+
+
+
+
 To Do:
 - fix export format from String to DateTime 

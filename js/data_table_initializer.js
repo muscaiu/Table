@@ -33,7 +33,7 @@ $(document).ready(function () {
                 return typeof i === 'string' ? i.replace(/[\$,]/g, '') * 1 :
                     typeof i === 'number' ? i : 0;
             };                                                         
-       /*********** sum Quantita **********/
+
             var quantita = this.api(), data;
             total_quantita = quantita
                 .column(5)
@@ -53,28 +53,39 @@ $(document).ready(function () {
                 .footer())
                 .html(pageTotal_quantita + ' (' + total_quantita + ' total)');
 
-       /*********** sum Tempo **********/
+
             var tempo = this.api();
             //total for all pages
             var tempoTotal = tempo.column(3)
                     .data()
-                    .sum();            
-            tempoTotal = tempoTotal.toString();        
+                    .sum();
+            //Trying to convert to time    
+            tempoTotal = tempoTotal.toString();
+                         
+            while (tempoTotal.length < 6){
+                tempoTotal = "0" + tempoTotal
+            }          
+            
             tempoTotal = tempoTotal.replace(/^(\d+)(\d{2})(\d{2})$/, function(m, m1, m2, m3) {
-                m1 = Number(m1); // convert captured group value to number
-                m2 = Number(m2);
-                m2 += parseInt(m3 / 60, 10); // get minutes from second and add it to minute
-                m3 = m3 % 60; // get soconds
-                m1 += parseInt(m2 / 60, 10); // get minutes from minute and add it to hour
-                m2 = m2 % 60; // get minutes
-                // add 0 to minute and second if single digit , slice(-2) will select last 2 digit
-                return m1 + ':' + ('0' + m2).slice(-2) + ':' + ('0' + m3).slice(-2); // return updated string
-            })
+            m1 = Number(m1); // convert captured group value to number
+            m2 = Number(m2);
+            m2 += parseInt(m3 / 60, 10); // get minutes from second and add it to minute
+            m3 = m3 % 60; // get soconds
+            m1 += parseInt(m2 / 60, 10); // get minutes from minute and add it to hour
+            m2 = m2 % 60; // get minutes
+            // add 0 to minute and second if single digit , slice(-2) will select last 2 digit
+            return m1 + ':' + ('0' + m2).slice(-2) + ':' + ('0' + m3).slice(-2); // return updated string
+             })
+            
             //total for current page
             var tempoPage = tempo.column(3, { page: 'current' })
                 .data()
                 .sum();  
-            tempoPage = tempoPage.toString();        
+            tempoPage = tempoPage.toString();
+            
+            while (tempoPage.length < 6){
+                tempoPage = "0" + tempoPage   
+            }   
             tempoPage = tempoPage.replace(/^(\d+)(\d{2})(\d{2})$/, function(m, m1, m2, m3) {
                     m1 = Number(m1); // convert captured group value to number
                     m2 = Number(m2);
@@ -131,7 +142,7 @@ $(document).ready(function () {
 $(function () {
     $("#from").datepicker({
         dateFormat: 'yy-mm-dd',
-        //defaultDate: "+1w",
+        defaultDate: "+1w",
         changeMonth: true,
         changeYear: true,
         numberOfMonths: 1,
@@ -141,7 +152,7 @@ $(function () {
     });
     $("#to").datepicker({
         dateFormat: 'yy-mm-dd',
-        //defaultDate: "+1w",
+        defaultDate: "+1w",
         changeMonth: true,
         changeYear: true,
         numberOfMonths: 1,
