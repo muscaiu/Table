@@ -1,38 +1,74 @@
 // //Usage
 $(document).ready(function () {
+    var header = [];
+    header.push("id");
+    header.push("id_op");
+    header.push("tipo_lav");
+    header.push("tempo_new");
+    header.push("motivazione");
+    header.push("quantita");
+    header.push("data");
+
+    //format header using the array and column index
+    var buttonExp = {
+        exportOptions: {
+            format: {
+                header: function (data, column, row) {
+                    return header[column]; //header is the array I used to store header texts
+                }
+            }
+        }
+    };
+
     var table = $('#myTable').DataTable({
         stateSave: true,
         iDisplayLength: 10,
         pagingType: "full_numbers",
         lengthMenu: [[10, 50, 100, -1], [10, 50, 100, "All"]],
         dom: 'lfBrtip',
+        //     aoColumnDefs: [
+        //       { 'bSortable': false, 'aTargets': [ 1 ] }
+        //    ],
         buttons: [
-            {
-                extend: 'copy',
-                footer: true
-            },
-            {
-                extend: 'csv',
-                footer: true
-            },
-            {
-                extend: 'excel',
-                footer: true
-            },
-            {
-                extend: 'pdf',
-                footer: true
-            }
+            // {
+            //     extend: 'copy',
+            //     footer: true
+            // },
+            $.extend(true, {}, buttonExp, {
+            extend: 'copy'
+            }),
+            // {
+            //     extend: 'csv',
+            //     footer: true
+            // },
+            $.extend(true, {}, buttonExp, {
+            extend: 'csv'
+            }),
+            // {
+            //     extend: 'excel',
+            //     footer: true
+            // },
+            $.extend(true, {}, buttonExp, {
+            extend: 'excelHtml5'
+            }),
+            // {
+            //     extend: 'pdf',
+            //     footer: true
+            // }
+            $.extend(true, {}, buttonExp, {
+            extend: 'pdf'
+            }),
         ],
         oSelectorOpts: { filter: 'applied', order: 'current' },
 
-/***************** <START> Footer SUM ******************/
+
+        /***************** <START> Footer SUM ******************/
         footerCallback: function (row, data, start, end, display) {
             // Remove the formatting to get integer data for summation
             var intVal = function (i) {
                 return typeof i === 'string' ? i.replace(/[\$,]/g, '') * 1 :
                     typeof i === 'number' ? i : 0;
-            };                                                         
+            };
 
             var quantita = this.api(), data;
             total_quantita = quantita
@@ -57,58 +93,123 @@ $(document).ready(function () {
             var tempo = this.api();
             //total for all pages
             var tempoTotal = tempo.column(3)
-                    .data()
-                    .sum();
-            //Trying to convert to time    
+                .data()
+                .sum();
             tempoTotal = tempoTotal.toString();
-                         
-            while (tempoTotal.length < 6){
+
+            while (tempoTotal.length != 6) {
                 tempoTotal = "0" + tempoTotal
-            }          
-            
-            tempoTotal = tempoTotal.replace(/^(\d+)(\d{2})(\d{2})$/, function(m, m1, m2, m3) {
-            m1 = Number(m1); // convert captured group value to number
-            m2 = Number(m2);
-            m2 += parseInt(m3 / 60, 10); // get minutes from second and add it to minute
-            m3 = m3 % 60; // get soconds
-            m1 += parseInt(m2 / 60, 10); // get minutes from minute and add it to hour
-            m2 = m2 % 60; // get minutes
-            // add 0 to minute and second if single digit , slice(-2) will select last 2 digit
-            return m1 + ':' + ('0' + m2).slice(-2) + ':' + ('0' + m3).slice(-2); // return updated string
-             })
-            
+            }
+
+            tempoTotal = tempoTotal.replace(/^(\d+)(\d{2})(\d{2})$/, function (m, m1, m2, m3) {
+                m1 = Number(m1);
+                m2 = Number(m2);
+                m2 += parseInt(m3 / 60, 10);
+                m3 = m3 % 60;
+                m1 += parseInt(m2 / 60, 10); // get minutes from minute and add it to hour
+                m2 = m2 % 60; // get minutes
+                // add 0 to minute and second if single digit , slice(-2) will select last 2 digit
+                return m1 + ':' + ('0' + m2).slice(-2) + ':' + ('0' + m3).slice(-2); // return updated string
+            })
+
             //total for current page
             var tempoPage = tempo.column(3, { page: 'current' })
                 .data()
-                .sum();  
+                .sum();
             tempoPage = tempoPage.toString();
-            
-            while (tempoPage.length < 6){
-                tempoPage = "0" + tempoPage   
-            }   
-            tempoPage = tempoPage.replace(/^(\d+)(\d{2})(\d{2})$/, function(m, m1, m2, m3) {
-                    m1 = Number(m1); // convert captured group value to number
-                    m2 = Number(m2);
-                    m2 += parseInt(m3 / 60, 10); // get minutes from second and add it to minute
-                    m3 = m3 % 60; // get soconds
-                    m1 += parseInt(m2 / 60, 10); // get minutes from minute and add it to hour
-                    m2 = m2 % 60; // get minutes
-                    // add 0 to minute and second if single digit , slice(-2) will select last 2 digit
-                    return m1 + ':' + ('0' + m2).slice(-2) + ':' + ('0' + m3).slice(-2); // return updated string
+            while (tempoPage.length != 6) {
+                tempoPage = "0" + tempoPage
+            }
+            tempoPage = tempoPage.replace(/^(\d+)(\d{2})(\d{2})$/, function (m, m1, m2, m3) {
+                m1 = Number(m1); // convert captured group value to number
+                m2 = Number(m2);
+                m2 += parseInt(m3 / 60, 10); // get minutes from second and add it to minute
+                m3 = m3 % 60; // get soconds
+                m1 += parseInt(m2 / 60, 10); // get minutes from minute and add it to hour
+                m2 = m2 % 60; // get minutes
+                // add 0 to minute and second if single digit , slice(-2) will select last 2 digit
+                return m1 + ':' + ('0' + m2).slice(-2) + ':' + ('0' + m3).slice(-2); // return updated string
             })
-                            
+            //Number(tempoPage, tempoTotal);
             //write in footer
             $(tempo.column(3)
                 .footer())
                 .html(
                 tempoPage + ' (' + tempoTotal + ' total)');
-        }
-    });    
+        },
+        /***************** DropDowns ******************/
+        // initComplete: function () {
+        //     this.api().columns().every( function () {
+        //         var column = this;
+        //         var select = $('<select class="form-control"><option value=""></option></select>')
+        //             .appendTo( $(column.header()))
+        //             .on( 'change', function () {
+        //                 var val = $.fn.dataTable.util.escapeRegex(
+        //                     $(this).val()
+        //                 );
 
-    
-/************ <END> Footer SUM ****************/
-    
-    // Add event listeners to the two range filtering inputs
+        //                 column
+        //                     .search( val ? '^'+val+'$' : '', true, false )
+        //                     .draw();
+        //             } );
+
+        //         column.data().unique().sort().each( function ( d, j ) {
+        //             select.append( '<option value="'+d+'">'+d+'</option>' )
+        //         } );
+        //     } );
+
+
+        // var buttonExp = {
+        //     exportOptions: {
+        //         format: {
+        //         header: function ( data, column, row ) {
+        //             return header[column]; //header is the array I used to store header texts
+        //         }
+        //         }
+        //     }
+        //     };
+        // var header = [];
+        //         header.push("id");
+        //         header.push("id_op");
+        //         header.push("tipo_lav");
+        // new $.fn.dataTable.Buttons( table, {
+        //         "buttons": [$.extend( true, {}, buttonExp, {
+        //                 extend: 'excelHtml5'
+        //             })]
+        //         });
+
+        // table.buttons(0,null).containers().appendTo('#containerId');
+        //}
+        initComplete: function () {
+            var api = this.api();
+            this.api().columns().eq(0).each(function (index) {
+                if (index == 1 || index == 4) {
+                    var column = this;
+                    var select = $('<select class="form-control"><option value=""></option></select>')
+                        .appendTo($(api.column(index).header()))
+                        .on('change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
+
+                            column
+                                //.row(index).data()
+                                //.search(val ? '^' + val + '$' : '', true, false)
+                                .search( val ? val : '', true, false )
+                                .draw();
+                        });
+                    var i = 0;
+                    api.column(index).data().unique().sort().each(function (d, j) {
+                        select.append('<option value="' + d + '">' + d + '</option>');
+                    });
+                }
+            });
+        }
+    });
+
+    /************ <END> Footer SUM ****************/
+
+    // Redraw Table on inputs click
     $('#from').change(function () {
         table.draw();
     });
@@ -120,7 +221,6 @@ $(document).ready(function () {
     });
 
     //Enable Search ONLY for column 0,1,2,3,4,5 (only option found!) 
-    //By overwriting the search method
     $('.dataTables_filter input').unbind().on('keyup', function () {
         var searchTerm = this.value.toLowerCase();
         $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
@@ -135,14 +235,30 @@ $(document).ready(function () {
         table.draw();
         $.fn.dataTable.ext.search.pop();
     })
-});
+
+    //STOP Resorting when clicking on Dropdown
+    $("thead th").each(function (i) {
+        $('select', this).click(function (event) {
+            event.stopPropagation();
+        });
+    });
+
+    //Add the excel button to dom
+    new $.fn.dataTable.Buttons(table, {
+        "buttons": [$.extend(true, {}, buttonExp, {
+            extend: 'excelHtml5'
+        })]
+    });
+    
+    $("select").on("change",function(){table.row($(this).parents("tr")).data()});
+    });
 
 
 //Date Range Picker
 $(function () {
     $("#from").datepicker({
         dateFormat: 'yy-mm-dd',
-        defaultDate: "+1w",
+        //defaultDate: "+1w",
         changeMonth: true,
         changeYear: true,
         numberOfMonths: 1,
@@ -152,7 +268,7 @@ $(function () {
     });
     $("#to").datepicker({
         dateFormat: 'yy-mm-dd',
-        defaultDate: "+1w",
+        //defaultDate: "+1w",
         changeMonth: true,
         changeYear: true,
         numberOfMonths: 1,
@@ -199,7 +315,7 @@ jQuery.fn.dataTable.Api.register('sum()', function () {
         if (typeof a === 'string') {
             a = a.replace(/[^\d.-]/g, '') * 1;
         }
-        
+
         if (typeof b === 'string') {
             b = b.replace(/[^\d.-]/g, '') * 1;
         }

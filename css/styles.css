@@ -7,3 +7,12 @@ div.dt-buttons{
     width: 25%;
     margin: 0 auto; 
 }
+/*tfoot {
+    display: table-header-group;
+}*/
+
+button, input, select, textarea {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+}
