@@ -15,48 +15,66 @@ $(document).ready(function () {
             format: {
                 header: function (data, column, row) {
                     return header[column]; //header is the array I used to store header texts
+                },
+                body: function (data, column, row){
+                    return column === 5 ?
+                    data.replace( /[qwe,]/g, '' ) :
+                    data;
                 }
             }
         }
     };
 
     var table = $('#myTable').DataTable({
+        select: true,
         stateSave: true,
         iDisplayLength: 10,
         pagingType: "full_numbers",
         lengthMenu: [[10, 50, 100, -1], [10, 50, 100, "All"]],
         dom: 'lfBrtip',
-        //     aoColumnDefs: [
-        //       { 'bSortable': false, 'aTargets': [ 1 ] }
-        //    ],
+
         buttons: [
-            // {
-            //     extend: 'copy',
-            //     footer: true
-            // },
+            /************** EXPORT CSV **************/
             $.extend(true, {}, buttonExp, {
-            extend: 'copy'
+                extend: 'csvHtml5',
+                text: 'Csv All',
+                exportOptions: {
+                    modifier: {
+                        page: 'current'
+                    }
+                },                
+                footer: true
             }),
-            // {
-            //     extend: 'csv',
-            //     footer: true
-            // },
+            /************** EXPORT XLS **************/
             $.extend(true, {}, buttonExp, {
-            extend: 'csv'
+                extend: 'excelHtml5',
+                text: 'Xls All',
+                exportOptions: {
+                    modifier: {
+                        page: 'current'
+                    }
+                },
+                footer: true
+                // customize: function ( xslx ) {
+                //     var sheet = xlsx.xl.worksheets['sheet1.xml']; 
+                //     $('c[r=A1] t', sheet).text( 'Custom text' );
+                // }
             }),
-            // {
-            //     extend: 'excel',
-            //     footer: true
-            // },
-            $.extend(true, {}, buttonExp, {
-            extend: 'excelHtml5'
+                $.extend(true, {}, buttonExp, {
+                extend: 'excelHtml5',
+                text: 'Xls Selected',
+                exportOptions: {
+                    modifier: {
+                        page: 'current',
+                        selected: true
+                    }
+                },
+                footer : true
             }),
-            // {
-            //     extend: 'pdf',
-            //     footer: true
-            // }
+
             $.extend(true, {}, buttonExp, {
-            extend: 'pdf'
+               extend: 'pdfHtml5',
+               footer: true
             }),
         ],
         oSelectorOpts: { filter: 'applied', order: 'current' },
