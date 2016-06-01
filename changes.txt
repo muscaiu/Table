@@ -4,21 +4,30 @@ Changes (23.05.2016)
 - added Footer quantita for filtered page
 - added Footer total quantita 
 - removed Data from Search filter
++ added moment-duration-format.min.js
++ added moment.js
++ added references in Index.html
++ changed data_table_initializer.js (many times)
 
-File Changes (23.05.2016)
-- added moment-duration-format.min.js
-- added moment.js
-- added references in Index.html
-- changed data_table_initializer.js (many times)
-
-File Changes (24.05.2016)
+Changes (24.05.2016)
 - sent updates to Antonio
 
-File Changes (25.05.2016)
+Changes (25.05.2016)
 - fixed footer sum of tempo_new to add hh:mm:ss
 
+Changes (30.05.2016)
+- added dropdowns
+- fixed click 
+- fixed resort
+- fixed 2 dropdowns
+- fixed export 
+- fixed to export only selected rows
+- added 
++  added datatables.select.js
 
-
+Changes (1.06.2016)
+- moved all buttons into 1 Export button
++ added datatables.editor.js
 
 
 To Do:
