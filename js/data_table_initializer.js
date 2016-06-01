@@ -32,65 +32,123 @@ $(document).ready(function () {
         iDisplayLength: 10,
         pagingType: "full_numbers",
         lengthMenu: [[10, 50, 100, -1], [10, 50, 100, "All"]],
-        dom: 'lfBrtip',
+        dom: 'lfBrtip',   
         buttons: [
-            /************** EXPORT CSV ALL **************/
-            $.extend(true, {}, buttonExp, {
-                extend: 'csvHtml5',
-                text: 'CSV ALL',
-                exportOptions: {
-                    modifier: {
-                        page: 'current'
-                    }
-                },                
-                footer: true
-            }),
-            /************** EXPORT CSV Selected **************/
-            $.extend(true, {}, buttonExp, {
-                extend: 'csvHtml5',
-                text: 'CSV Selected',
-                exportOptions: {                    
-                    modifier: {
-                        page: 'current',
-                        selected: true
-                    }
-                },
-                footer : true
-            }),
-            
-            /************** EXPORT XLS ALL **************/
-            $.extend(true, {}, buttonExp, {
-                extend: 'excelHtml5',
-                text: 'XLS ALL',
-                exportOptions: {
-                    //orthogonal: 'export',
-                    modifier: {
-                        page: 'current'
-                    }
-                },
-                footer: true,
-                // customize: function ( xslx ) {
-                //     var sheet = xlsx.xl.worksheets['sheet1.xml']; 
-                //     $('c[r=A1] t', sheet).text( 'Custom text' );
-                // }
-            }),
-            /************** EXPORT XLS Selected **************/
-                $.extend(true, {}, buttonExp, {
-                extend: 'excelHtml5',
-                text: 'XLS Selected',
-                exportOptions: {                    
-                    modifier: {
-                        page: 'current',
-                        selected: true
-                    }
-                },
-                footer : true
-            }),
-
-            // $.extend(true, {}, buttonExp, {
-            //    extend: 'pdfHtml5',
-            //    footer: true
-            // }),
+            { extend: 'collection',
+                text: 'Export',
+                buttons: [
+/************** COPY ALL **************/
+                    $.extend(true, {}, buttonExp, {
+                        extend: 'copyHtml5',
+                        text: 'Copy ALL',
+                        exportOptions: {
+                            //orthogonal: 'export',
+                            modifier: {
+                                page: 'current'
+                            }
+                        },
+                        footer: true,
+                        // customize: function ( xslx ) {
+                        //     var sheet = xlsx.xl.worksheets['sheet1.xml']; 
+                        //     $('c[r=A1] t', sheet).text( 'Custom text' );
+                        // }
+                    }),
+/************** Copy Selected **************/
+                        $.extend(true, {}, buttonExp, {
+                        extend: 'copyHtml5',
+                        text: 'Copy Selected',
+                        exportOptions: {                    
+                            modifier: {
+                                page: 'current',
+                                selected: true
+                            }
+                        },
+                        footer : true
+                    }),
+/************** EXPORT XLS ALL **************/
+                    $.extend(true, {}, buttonExp, {
+                        extend: 'excelHtml5',
+                        text: 'Export XLS ALL',
+                        exportOptions: {
+                            //orthogonal: 'export',
+                            modifier: {
+                                page: 'current'
+                            }
+                        },
+                        footer: true,
+                        // customize: function ( xslx ) {
+                        //     var sheet = xlsx.xl.worksheets['sheet1.xml']; 
+                        //     $('c[r=A1] t', sheet).text( 'Custom text' );
+                        // }
+                    }),
+/************** EXPORT XLS Selected **************/
+                        $.extend(true, {}, buttonExp, {
+                        extend: 'excelHtml5',
+                        text: 'Export XLS Selected',
+                        exportOptions: {                    
+                            modifier: {
+                                page: 'current',
+                                selected: true
+                            }
+                        },
+                        footer : true
+                    }),
+                    
+/************** EXPORT CSV ALL **************/
+                    $.extend(true, {}, buttonExp, {
+                        extend: 'csvHtml5',
+                        text: 'Export CSV ALL',
+                        exportOptions: {
+                            modifier: {
+                                page: 'current'
+                            }
+                        },  
+                        //showAll: false,              
+                        footer: true
+                    }),
+/************** EXPORT CSV Selected **************/
+                    $.extend(true, {}, buttonExp, {
+                        extend: 'csvHtml5',
+                        text: 'Export CSV Selected',
+                        exportOptions: {                    
+                            modifier: {
+                                page: 'current',
+                                selected: true
+                            }
+                        },
+                        footer : true
+                    }),
+/************** EXPORT PDF ALL **************/
+                    $.extend(true, {}, buttonExp, {
+                        extend: 'pdfHtml5',
+                        text: 'Export PDF ALL',
+                        exportOptions: {
+                            modifier: {
+                                page: 'current'
+                            }
+                        },  
+                        //showAll: false,              
+                        footer: true
+                    }),
+/************** EXPORT PDF Selected **************/
+                    $.extend(true, {}, buttonExp, {
+                        extend: 'pdfHtml5',
+                        text: 'Export PDF Selected',
+                        exportOptions: {                    
+                            modifier: {
+                                page: 'current',
+                                selected: true
+                            }
+                        },
+                        footer : true
+                    }),
+                ]
+            } 
+        //     // $.extend(true, {}, buttonExp, {
+        //     //    extend: 'pdfHtml5',
+        //     //    footer: true
+        //     // }),
+        // 
         ],
         oSelectorOpts: { filter: 'applied', order: 'current' },
 
@@ -253,7 +311,7 @@ $(document).ready(function () {
     $('#myTable_length').change(function () {
         table.draw();
     });
-
+   
     //Enable Search ONLY for column 0,1,2,3,4,5 (only option found!) 
     $('.dataTables_filter input').unbind().on('keyup', function () {
         var searchTerm = this.value.toLowerCase();

@@ -31,6 +31,7 @@
   <script src="js/moment.js"></script> 
   <script src="js/moment-duration-format.min.js"></script>   
   <script src="js/dataTables.select.min.js"></script>   
+  <script src="js/dataTables.editor.js"></script>   
 </head>
 
 <body>
