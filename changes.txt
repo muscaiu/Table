@@ -29,6 +29,8 @@ Changes (1.06.2016)
 - moved all buttons into 1 Export button
 + added datatables.editor.js
 
+Changes (7.06.2016)
+- changed csv export from ',' to ';'
 
 To Do:
 - fix export format from String to DateTime 

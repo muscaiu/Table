@@ -15,13 +15,13 @@ $(document).ready(function () {
             format: {
                 header: function (data, column, row) {
                     return header[column]; //header is the array I used to store header texts
-                },
-                body: function (data, column, row){
-                    return column === 4 ?
-                    //data.replace( /[test]/, 'REPLACED' ) :
-                    data.replace( 'test', 'REPLACED' ) :
-                    data;
-                }
+                },                
+                // body: function (data, column, row){
+                //     return column === 4 ?
+                //     //data.replace( /[test]/, 'REPLACED' ) :
+                //     data.replace( 'test', 'REPLACED' ) :
+                //     data;
+                // }
             }
         }
     };
@@ -41,17 +41,7 @@ $(document).ready(function () {
                     $.extend(true, {}, buttonExp, {
                         extend: 'copyHtml5',
                         text: 'Copy ALL',
-                        exportOptions: {
-                            //orthogonal: 'export',
-                            modifier: {
-                                page: 'current'
-                            }
-                        },
                         footer: true,
-                        // customize: function ( xslx ) {
-                        //     var sheet = xlsx.xl.worksheets['sheet1.xml']; 
-                        //     $('c[r=A1] t', sheet).text( 'Custom text' );
-                        // }
                     }),
 /************** Copy Selected **************/
                         $.extend(true, {}, buttonExp, {
@@ -59,7 +49,6 @@ $(document).ready(function () {
                         text: 'Copy Selected',
                         exportOptions: {                    
                             modifier: {
-                                page: 'current',
                                 selected: true
                             }
                         },
@@ -68,13 +57,7 @@ $(document).ready(function () {
 /************** EXPORT XLS ALL **************/
                     $.extend(true, {}, buttonExp, {
                         extend: 'excelHtml5',
-                        text: 'Export XLS ALL',
-                        exportOptions: {
-                            //orthogonal: 'export',
-                            modifier: {
-                                page: 'current'
-                            }
-                        },
+                        text: 'Export XLSX ALL',
                         footer: true,
                         // customize: function ( xslx ) {
                         //     var sheet = xlsx.xl.worksheets['sheet1.xml']; 
@@ -84,10 +67,10 @@ $(document).ready(function () {
 /************** EXPORT XLS Selected **************/
                         $.extend(true, {}, buttonExp, {
                         extend: 'excelHtml5',
-                        text: 'Export XLS Selected',
+                        text: 'Export XLSX Selected',
                         exportOptions: {                    
                             modifier: {
-                                page: 'current',
+                                //page: 'current',
                                 selected: true
                             }
                         },
@@ -98,21 +81,24 @@ $(document).ready(function () {
                     $.extend(true, {}, buttonExp, {
                         extend: 'csvHtml5',
                         text: 'Export CSV ALL',
-                        exportOptions: {
+                        fieldSeparator: ';',
+                        extension: '.csv',          
+                        footer: true,
+                        exportOptions: {                    
                             modifier: {
-                                page: 'current'
+                                //page: 'current',
                             }
-                        },  
-                        //showAll: false,              
-                        footer: true
+                        },
                     }),
 /************** EXPORT CSV Selected **************/
                     $.extend(true, {}, buttonExp, {
                         extend: 'csvHtml5',
                         text: 'Export CSV Selected',
+                        fieldSeparator: ';',
+                        extension: '.csv',
                         exportOptions: {                    
                             modifier: {
-                                page: 'current',
+                                //page: 'current',
                                 selected: true
                             }
                         },
@@ -121,13 +107,7 @@ $(document).ready(function () {
 /************** EXPORT PDF ALL **************/
                     $.extend(true, {}, buttonExp, {
                         extend: 'pdfHtml5',
-                        text: 'Export PDF ALL',
-                        exportOptions: {
-                            modifier: {
-                                page: 'current'
-                            }
-                        },  
-                        //showAll: false,              
+                        text: 'Export PDF ALL',   
                         footer: true
                     }),
 /************** EXPORT PDF Selected **************/
@@ -136,7 +116,6 @@ $(document).ready(function () {
                         text: 'Export PDF Selected',
                         exportOptions: {                    
                             modifier: {
-                                page: 'current',
                                 selected: true
                             }
                         },
@@ -144,11 +123,6 @@ $(document).ready(function () {
                     }),
                 ]
             } 
-        //     // $.extend(true, {}, buttonExp, {
-        //     //    extend: 'pdfHtml5',
-        //     //    footer: true
-        //     // }),
-        // 
         ],
         oSelectorOpts: { filter: 'applied', order: 'current' },
 
