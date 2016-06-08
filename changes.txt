@@ -35,6 +35,8 @@ Changes (7.06.2016)
 Changes (8.06.2016)
 + removed datatables.editor.js
 - changed sum() function to sumTime()
+* sent updates to Antonio
+
 
 To Do:
 - fix export format from String to DateTime 
