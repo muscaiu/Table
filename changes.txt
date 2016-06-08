@@ -10,7 +10,7 @@ Changes (23.05.2016)
 + changed data_table_initializer.js (many times)
 
 Changes (24.05.2016)
-- sent updates to Antonio
+* sent updates to Antonio
 
 Changes (25.05.2016)
 - fixed footer sum of tempo_new to add hh:mm:ss
@@ -22,7 +22,6 @@ Changes (30.05.2016)
 - fixed 2 dropdowns
 - fixed export 
 - fixed to export only selected rows
-- added 
 +  added datatables.select.js
 
 Changes (1.06.2016)
@@ -31,6 +30,11 @@ Changes (1.06.2016)
 
 Changes (7.06.2016)
 - changed csv export from ',' to ';'
+* sent updates to Antonio
+
+Changes (8.06.2016)
++ removed datatables.editor.js
+- changed sum() function to sumTime()
 
 To Do:
 - fix export format from String to DateTime 

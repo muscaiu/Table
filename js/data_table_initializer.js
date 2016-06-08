@@ -81,7 +81,7 @@ $(document).ready(function () {
                     $.extend(true, {}, buttonExp, {
                         extend: 'csvHtml5',
                         text: 'Export CSV ALL',
-                        fieldSeparator: ';',
+                        //fieldSeparator: ';',
                         extension: '.csv',          
                         footer: true,
                         exportOptions: {                    
@@ -127,14 +127,13 @@ $(document).ready(function () {
         oSelectorOpts: { filter: 'applied', order: 'current' },
 
 
-        /***************** <START> Footer SUM ******************/
+/***************** <START> Footer SUM ******************/
         footerCallback: function (row, data, start, end, display) {
-            // Remove the formatting to get integer data for summation
+/***************** Quantita SUM ******************/
             var intVal = function (i) {
                 return typeof i === 'string' ? i.replace(/[\$,]/g, '') * 1 :
                     typeof i === 'number' ? i : 0;
             };
-
             var quantita = this.api(), data;
             total_quantita = quantita
                 .column(5)
@@ -142,27 +141,26 @@ $(document).ready(function () {
                 .reduce(function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0);
-
             pageTotal_quantita = quantita
                 .column(5, { page: 'current' })
                 .data()
                 .reduce(function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0);
-
             $(quantita.column(5)
                 .footer())
                 .html(pageTotal_quantita + ' (' + total_quantita + ' total)');
 
-
+/***************** Tempo SUM ******************/
             var tempo = this.api();
+
             //total for all pages
             var tempoTotal = tempo.column(3)
                 .data()
-                .sum();
+                .sumTime();
             tempoTotal = tempoTotal.toString();
 
-            while (tempoTotal.length != 6) {
+            while (tempoTotal.length < 6) {
                 tempoTotal = "0" + tempoTotal
             }
 
@@ -171,30 +169,54 @@ $(document).ready(function () {
                 m2 = Number(m2);
                 m2 += parseInt(m3 / 60, 10);
                 m3 = m3 % 60;
-                m1 += parseInt(m2 / 60, 10); // get minutes from minute and add it to hour
-                m2 = m2 % 60; // get minutes
+                m1 += parseInt(m2 / 60, 10); // hours from minutes
+                m2 = m2 % 60; // minutes
                 // add 0 to minute and second if single digit , slice(-2) will select last 2 digit
-                return m1 + ':' + ('0' + m2).slice(-2) + ':' + ('0' + m3).slice(-2); // return updated string
+                return '0' + m1 + ':' + ('0' + m2).slice(-2) + ':' + ('0' + m3).slice(-2); // return updated string
             })
+
+
+
+
+
 
             //total for current page
             var tempoPage = tempo.column(3, { page: 'current' })
                 .data()
-                .sum();
+                .sumTime();
             tempoPage = tempoPage.toString();
-            while (tempoPage.length != 6) {
+            while (tempoPage.length < 6) {
                 tempoPage = "0" + tempoPage
             }
             tempoPage = tempoPage.replace(/^(\d+)(\d{2})(\d{2})$/, function (m, m1, m2, m3) {
-                m1 = Number(m1); // convert captured group value to number
+                m1 = Number(m1);
                 m2 = Number(m2);
-                m2 += parseInt(m3 / 60, 10); // get minutes from second and add it to minute
+                m2 += parseInt(m3 / 60, 10);
                 m3 = m3 % 60; // get soconds
-                m1 += parseInt(m2 / 60, 10); // get minutes from minute and add it to hour
-                m2 = m2 % 60; // get minutes
+                m1 += parseInt(m2 / 60, 10); // get hours
+                m2 = m2 % 60; // get minutes                
+                //convert back to string
+                m2 = m2.toString();
+                m3 = m3.toString();
+                m1 = m1.toString();            
+
+                while (m1.length < 2){
+                    m1 = '0' + m1
+                }
+                while (m2.length < 2){
+                    m2 = '0' + m2
+                }
+                while (m3.length < 2){
+                    m3 = '0' + m3
+                }                
+
                 // add 0 to minute and second if single digit , slice(-2) will select last 2 digit
-                return m1 + ':' + ('0' + m2).slice(-2) + ':' + ('0' + m3).slice(-2); // return updated string
+                return m1 + ':' + 
+                      m2.slice(-2) + ':' + 
+                      m3.slice(-2);
             })
+
+
             //write in footer
             $(tempo.column(3)
                 .footer())
@@ -202,74 +224,23 @@ $(document).ready(function () {
                 tempoPage + ' (' + tempoTotal + ' total)');
         },
         /***************** DropDowns ******************/
-        // initComplete: function () {
-        //     this.api().columns().every( function () {
-        //         var column = this;
-        //         var select = $('<select class="form-control"><option value=""></option></select>')
-        //             .appendTo( $(column.header()))
-        //             .on( 'change', function () {
-        //                 var val = $.fn.dataTable.util.escapeRegex(
-        //                     $(this).val()
-        //                 );
-
-        //                 column
-        //                     .search( val ? '^'+val+'$' : '', true, false )
-        //                     .draw();
-        //             } );
-
-        //         column.data().unique().sort().each( function ( d, j ) {
-        //             select.append( '<option value="'+d+'">'+d+'</option>' )
-        //         } );
-        //     } );
-
-
-        // var buttonExp = {
-        //     exportOptions: {
-        //         format: {
-        //         header: function ( data, column, row ) {
-        //             return header[column]; //header is the array I used to store header texts
-        //         }
-        //         }
-        //     }
-        //     };
-        // var header = [];
-        //         header.push("id");
-        //         header.push("id_op");
-        //         header.push("tipo_lav");
-        // new $.fn.dataTable.Buttons( table, {
-        //         "buttons": [$.extend( true, {}, buttonExp, {
-        //                 extend: 'excelHtml5'
-        //             })]
-        //         });
-
-        // table.buttons(0,null).containers().appendTo('#containerId');
-        //}
-        initComplete: function () {
-            //var api = this.api();
-            //this.api().columns().eq(0).each(function (index) {
+        initComplete: function () {            
             this.api().columns().every( function () {
-                //if (index == 1 || index == 4) {
                     var column = this;
                     var select = $('<select class="form-control"><option value=""></option></select>')
-                        //.appendTo($(api.column(index).header()))
                         .appendTo( $(column.header()))
                         .on('change', function () {
                             var val = $.fn.dataTable.util.escapeRegex(
                                 $(this).val()
                             );
-
                             column
-                                //.row(index).data()
-                                //.search( val ? val : '', true, false )
                                 .search(val ? '^' + val + '$' : '', true, false)                                
                                 .draw();
                         });
                     var i = 0;
-                    //api.column(index).data().unique().sort().each(function (d, j) {
                         column.data().unique().sort().each( function ( d, j ) {
                         select.append( '<option value="'+d+'">'+d+'</option>' )
                     });
-                //}
             });
         }
     });
@@ -368,15 +339,36 @@ $.fn.dataTableExt.afnFiltering.push(
 
 
 /********************** SUM PLUGIN ***********************/
-jQuery.fn.dataTable.Api.register('sum()', function () {
-    return this.flatten().reduce(function (a, b) {
-        if (typeof a === 'string') {
-            a = a.replace(/[^\d.-]/g, '') * 1;
-        }
+// jQuery.fn.dataTable.Api.register('sum()', function () {
+//     return this.flatten().reduce(function (a, b) {
+//         if (typeof a === 'string') {
+//             a = a.replace(/[^\d]/g, '') * 1;
+//         }
+//         if (typeof b === 'string') {
+//             b = b.replace(/[^\d]/g, '') * 1;
+//         }
+//         return a + b;
+//     }, 0);
+// });
 
-        if (typeof b === 'string') {
-            b = b.replace(/[^\d.-]/g, '') * 1;
-        }
-        return a + b;
-    }, 0);
-});
+jQuery.fn.dataTable.Api.register( 'sumTime()', function ( ) {
+  function sum(int) {
+    return int > 9 ? int.toString() : '0' + int.toString()
+  }
+  var t, hours = 0, mins = 0, secs = 0;
+  for (var i=0; i<this.length; i++) {
+    t = this[i].split(':')
+    hours += parseInt(t[0])
+    mins += parseInt(t[1])
+    if (mins>60) {
+       mins -= 60
+       hours += 1
+    }
+    secs += parseInt(t[2])
+    if (secs>60) {
+       secs -= 60
+       mins += 1
+    }
+  }  
+  return sum(hours) + ':' + sum(mins) + ':' + sum(secs)
+})
