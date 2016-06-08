@@ -16,12 +16,6 @@ $(document).ready(function () {
                 header: function (data, column, row) {
                     return header[column]; //header is the array I used to store header texts
                 },                
-                // body: function (data, column, row){
-                //     return column === 4 ?
-                //     //data.replace( /[test]/, 'REPLACED' ) :
-                //     data.replace( 'test', 'REPLACED' ) :
-                //     data;
-                // }
             }
         }
     };
@@ -168,17 +162,29 @@ $(document).ready(function () {
                 m1 = Number(m1);
                 m2 = Number(m2);
                 m2 += parseInt(m3 / 60, 10);
-                m3 = m3 % 60;
-                m1 += parseInt(m2 / 60, 10); // hours from minutes
-                m2 = m2 % 60; // minutes
+                m3 = m3 % 60; // get soconds
+                m1 += parseInt(m2 / 60, 10); // get hours
+                m2 = m2 % 60; // get minutes                
+                //convert back to string
+                m2 = m2.toString();
+                m3 = m3.toString();
+                m1 = m1.toString();            
+
+                while (m1.length < 2){
+                    m1 = '0' + m1
+                }
+                while (m2.length < 2){
+                    m2 = '0' + m2
+                }
+                while (m3.length < 2){
+                    m3 = '0' + m3
+                }                
+
                 // add 0 to minute and second if single digit , slice(-2) will select last 2 digit
-                return '0' + m1 + ':' + ('0' + m2).slice(-2) + ':' + ('0' + m3).slice(-2); // return updated string
+                return m1 + ':' + 
+                      m2.slice(-2) + ':' + 
+                      m3.slice(-2);
             })
-
-
-
-
-
 
             //total for current page
             var tempoPage = tempo.column(3, { page: 'current' })
@@ -352,8 +358,8 @@ $.fn.dataTableExt.afnFiltering.push(
 // });
 
 jQuery.fn.dataTable.Api.register( 'sumTime()', function ( ) {
-  function sum(int) {
-    return int > 9 ? int.toString() : '0' + int.toString()
+  function sum(x) {
+    return x > 9 ? x.toString() : '0' + x.toString()
   }
   var t, hours = 0, mins = 0, secs = 0;
   for (var i=0; i<this.length; i++) {
