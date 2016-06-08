@@ -1,4 +1,3 @@
-// //Usage
 $(document).ready(function () {
     var header = [];
     header.push("id");
@@ -166,9 +165,9 @@ $(document).ready(function () {
                 m1 += parseInt(m2 / 60, 10); // get hours
                 m2 = m2 % 60; // get minutes                
                 //convert back to string
+                m1 = m1.toString();            
                 m2 = m2.toString();
                 m3 = m3.toString();
-                m1 = m1.toString();            
 
                 while (m1.length < 2){
                     m1 = '0' + m1
@@ -202,9 +201,9 @@ $(document).ready(function () {
                 m1 += parseInt(m2 / 60, 10); // get hours
                 m2 = m2 % 60; // get minutes                
                 //convert back to string
+                m1 = m1.toString();            
                 m2 = m2.toString();
                 m3 = m3.toString();
-                m1 = m1.toString();            
 
                 while (m1.length < 2){
                     m1 = '0' + m1
