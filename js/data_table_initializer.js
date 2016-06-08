@@ -74,7 +74,7 @@ $(document).ready(function () {
                     $.extend(true, {}, buttonExp, {
                         extend: 'csvHtml5',
                         text: 'Export CSV ALL',
-                        //fieldSeparator: ';',
+                        fieldSeparator: ';',
                         extension: '.csv',          
                         footer: true,
                         exportOptions: {                    
